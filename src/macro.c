@@ -428,15 +428,15 @@ int Xmacro(int status, char* label, char* mnemo, char* oper)
     crasm_error("nested macro definition");
   }
 
-  if (status & 1)
-  {
-    outputline();
-  }
-
   if (status & 2)
   {
     lbl = deflabel(mname, 0, L_MACRO, 0);
     lbl->ptr = 0;
+  }
+
+  if (status & 1)
+  {
+    outputline();
   }
 
   jmp_buf_copy(errjmpsav, errorjump);
