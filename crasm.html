@@ -6,8 +6,6 @@ Cross assembler for 6800/6801/6803/6502/65C02/Z80.
 <font face=arial,helvetica>
 <a href="https://github.com/colinbourassa/crasm">Summary</a>
 &nbsp;
-<a href="https://github.com/colinbourassa/crasm/archive/master.zip">Download</a>
-&nbsp;
 <a href="https://github.com/colinbourassa/crasm/tree/master/test">Examples</a>
 </font>
 <HR>
@@ -73,7 +71,11 @@ where the brackets delimit optional parts.
 <BR>
 <B></B><I>label</I><B> = </B><I>expression</I><B> [;</B><I>comment</I><B>]</B>
 <BR>
-<B>[</B><I>label</I><B>] </B><I>mnemonic</I><B> </B><I>operand</I><B> [;</B><I>comment</I><B>]</B>
+<B>[</B><I>label</I><B>[:]] </B><I>mnemonic</I><B> </B><I>operand</I><B> [;</B><I>comment</I><B>]</B>
+<BR>
+<I>label</I><B>: [;</B><I>comment</I><B>]</B>
+<BR>
+<I>label</I><B> [;</B><I>comment</I><B>]</B>
 </DL>
 <P>
 Comments are introduced by a semicolon 
@@ -82,6 +84,17 @@ and extend to the end of the line.
 Labels are identifiers containing up to 36 alphanumeric 
 characters (including period and underscore). Labels
 cannot start with a digit.
+<P>
+Crasm does not usually pays attention to the column position of the
+line components. Extra spaces are generously allowed between these
+components.  However, in the last template, the label must start in
+the first column of the line. The only exception is the case
+of a line containing only a label and possibly a comment.
+In that case the label must start in column zero.
+Just add a colon
+<B></B>(<B>:</B>)
+after the label to lift this restriction.
+<P>
 The format of the mnemonics and operands 
 field depends on the selected micro-processor.
 A few mnemonics are valid for all processors
@@ -113,7 +126,7 @@ underscores
 <B></B>(<B>_</B>).
 Labels cannot start with a digit.  
 They are case insensitive.
-<P>
+
 Labels starting with a period
 <B></B>(<B>.</B>)
 are local labels whose scope is either limited
@@ -401,8 +414,9 @@ Invocations of the macro can specify a list of comma
 separated operands.  The character sequences 
 <B>\1</B>, <B>\2</B>, ... <B>\</B><I>N</I>
 in the macro definition are replaced by the supplied operands.
-The character sequence <B>\0</B> is replaced by the number
-of supplied operands.
+The character sequence <B>\#</B> is replaced by the number
+of supplied operands. The character sequence <B>\*</B>
+is replaced by the unparsed macro arguments.
 <P>
 </DD><DT>
 <B>EXITM</B>
