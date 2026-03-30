@@ -23,6 +23,8 @@
 
 #include "cpu.h"
 
+static int cpuflag = 0;
+
 /* relative branchs */
 static int branch(int code, char* label, char* mnemo, char* oper)
 {
@@ -173,6 +175,12 @@ static int standard2(int code, char* label, char* mnemo, char* oper)
   int value;
 
   add = findmode(oper, &value);
+
+  if (add == 0x10 && code == 0x8d && cpuflag == 0)
+  {
+    add = 0x30;  /* jsr does not support direct on mc6800 */
+  }
+
   codemode(code, add, value);
 
   if (add == 0) /* immediate -> error */
@@ -194,7 +202,7 @@ static int standard3(int code, char* label, char* mnemo, char* oper)
 
   if (add == 0x10)
   {
-    add = 0x30;  /* direct -> extended */
+    add = 0x30;  /* convert direct to extended */
   }
 
   codemode(code, add, value);
@@ -307,7 +315,7 @@ mnemo("adca",  standard, 0x89)
 mnemo("oraa",  standard, 0x8a)
 mnemo("adda",  standard, 0x8b)
 mnemo("cpx",   standard, 0x8c)
-mnemo("jsr",   standard3, 0x8d)
+mnemo("jsr",   standard2, 0x8d)
 mnemo("lds",   standard, 0x8e)
 mnemo("sts",   standard2, 0x8f)
 
@@ -348,6 +356,8 @@ endmnemos
 
 void init6800(int code)
 {
+  cpuflag = code;
+  
   setflag(F_ADDR16);  /* 16 bit address       */
   clrflag(F_LOHI);    /* MSB first            */
   clrflag(F_RELATIF); /* no translatable code */
