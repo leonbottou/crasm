@@ -78,9 +78,11 @@ where the brackets delimit optional parts.
 .br
 .BI "" label " = " expression " [;" comment "]"
 .br
-.BI "[" label "] " mnemonic " " operand " [;" comment "]"
+.BI "[" label "[:]] " mnemonic " " operand " [;" comment "]"
 .br
-.BI "" label "[;" comment "]"
+.BI "" label ": [;" comment "]"
+.br
+.BI "" label " [;" comment "]"
 .PP
 Comments are introduced by a semicolon 
 .BR "" "(" ";" ")"
@@ -88,10 +90,16 @@ and extend to the end of the line.
 Labels are identifiers containing up to 36 alphanumeric 
 characters (including period and underscore). Labels
 cannot start with a digit.
-Crasm does not usually pays attention to the column position
-of the line components. The only exception is the case
+
+Crasm does not usually pays attention to the column position of the
+line components. Extra spaces are generously allowed between these
+components.  However, in the last template, the label must start in
+the first column of the line. The only exception is the case
 of a line containing only a label and possibly a comment.
 In that case the label must start in column zero.
+Just add a colon
+.BR "" "(" ":" ")"
+after the label to lift this restriction.
 .PP
 The format of the mnemonics and operands 
 field depends on the selected micro-processor.

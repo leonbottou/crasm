@@ -456,6 +456,17 @@ int asmline(char* s, int status)
     oper = NULL;
     mnemo = NULL;
     label = NULL;
+
+    if (filter(s, "?_:_?", &mnemo, &oper))
+    {
+      label = mnemo;
+      if (checklabel(label) == FALSE)
+      {
+        crasm_error("malformed label");
+      }
+      s = oper;
+    }
+
 start:
 
     if (filter(s, "? _?", &mnemo, &oper) && *mnemo && *oper)
@@ -487,7 +498,9 @@ start:
     if (linestartswithoutblanks && label == NULL && oper == NULL && mnemo != NULL)
     {
       label = mnemo;
-
+    }
+    if (label)
+    {
       if (status & 2)
       {
         herelabel(label);
